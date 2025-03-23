@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 import datetime
+import os.path
 
 def extract(url_geo, url_weather, params_geo, api_id):
     geo_code = requests.get(url_geo, params=params_geo,
@@ -53,7 +54,10 @@ def transform(weather_data):
     return df
 
 def load(dataframe):
-    dataframe.to_csv("seven_day_local_weather_data.csv", index=False, mode="w")
+    if os.path.exists("seven_day_local_weather_data.csv"):
+        dataframe.to_csv("seven_day_local_weather_data.csv", index=False, mode="a", header=False)
+    else:
+        dataframe.to_csv("seven_day_local_weather_data.csv", index=False, mode="a")
 
 if __name__ == "__main__":
     print("Don't Run")
